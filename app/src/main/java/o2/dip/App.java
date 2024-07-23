@@ -3,8 +3,43 @@
  */
 package o2.dip;
 
+import o2.dip.processors.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Map;
+
+import static o2.dip.processors.BeamEnergyProcessor.BEAM_ENERGY_TOPIC;
+import static o2.dip.processors.BeamModeProcessor.BEAM_MODE_TOPIC;
+import static o2.dip.processors.BetaStarProcessor.BETA_STAR_TOPIC;
+import static o2.dip.processors.DipoleCurrentProcessor.DIPOLE_CURRENT_TOPIC;
+import static o2.dip.processors.DipolePolarityProcessor.DIPOLE_POLARITY_TOPIC;
+import static o2.dip.processors.RunConfigurationProcessor.RUN_CONFIGURATION_TOPIC;
+import static o2.dip.processors.SafeBeamProcessor.SAFE_BEAM_TOPIC;
+import static o2.dip.processors.SolenoidCurrentProcessor.SOLENOID_CURRENT_TOPIC;
+import static o2.dip.processors.SolenoidPolarityProcessor.SOLENOID_POLARITY_TOPIC;
+
 public class App {
     public static void main(String[] args) {
-        var dipClient = new DipClient(new String[]{"dip/acc/*"});
+        Logger logger = LogManager.getLogger(App.class);
+
+        logger.info("Starting to listen to messages");
+
+        new DipClient(Map.of(
+            BEAM_MODE_TOPIC, new BeamModeProcessor(),
+            RUN_CONFIGURATION_TOPIC, new RunConfigurationProcessor(),
+            SAFE_BEAM_TOPIC, new SafeBeamProcessor(),
+            BETA_STAR_TOPIC, new BetaStarProcessor(),
+            BEAM_ENERGY_TOPIC, new BeamEnergyProcessor(),
+
+            DIPOLE_CURRENT_TOPIC, new DipoleCurrentProcessor(),
+            DIPOLE_POLARITY_TOPIC, new DipolePolarityProcessor(),
+            SOLENOID_CURRENT_TOPIC, new SolenoidCurrentProcessor(),
+            SOLENOID_POLARITY_TOPIC, new SolenoidPolarityProcessor()
+        ));
+
+        while (true) {
+            // Let dip client do the job?
+        }
     }
 }
