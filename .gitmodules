@@ -1,0 +1,3 @@
+[submodule "submodules/dip"]
+	path = submodules/dip
+	url = ssh://git@gitlab.cern.ch:7999/acc-co/cmw/cmw-dip/dip.git
